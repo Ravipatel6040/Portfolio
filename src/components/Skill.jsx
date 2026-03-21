@@ -1,4 +1,6 @@
 import React, { useRef } from "react";
+import { Canvas } from "@react-three/fiber";
+import { Float } from "@react-three/drei";
 import { FaHtml5, FaCss3Alt, FaReact, FaGitAlt } from "react-icons/fa";
 import {
   SiJavascript,
@@ -13,9 +15,30 @@ import {
   SiPostman,
 } from "react-icons/si";
 
-export default function Skills({
-  title = "My Skills",
-  skills = [
+// 🔥 Three.js floating particles
+const Particles = () => {
+  return (
+    <>
+      {[...Array(15)].map((_, i) => (
+        <Float key={i} speed={2} rotationIntensity={1} floatIntensity={2}>
+          <mesh
+            position={[
+              (Math.random() - 0.5) * 12,
+              (Math.random() - 0.5) * 6,
+              (Math.random() - 0.5) * 5,
+            ]}
+          >
+            <sphereGeometry args={[0.2, 32, 32]} />
+            <meshStandardMaterial color="#22c55e" />
+          </mesh>
+        </Float>
+      ))}
+    </>
+  );
+};
+
+export default function Skills() {
+  const skills = [
     { name: "HTML", icon: <FaHtml5 />, color: "#E44D26" },
     { name: "CSS", icon: <FaCss3Alt />, color: "#264DE4" },
     { name: "JavaScript", icon: <SiJavascript />, color: "#F0DB4F" },
@@ -23,95 +46,46 @@ export default function Skills({
     { name: "Node.js", icon: <SiNodedotjs />, color: "#83CD29" },
     { name: "Express", icon: <SiExpress />, color: "#000000" },
     { name: "MongoDB", icon: <SiMongodb />, color: "#47A248" },
-    { name: "Tailwind CSS", icon: <SiTailwindcss />, color: "#06B6D4" },
+    { name: "Tailwind", icon: <SiTailwindcss />, color: "#06B6D4" },
     { name: "Git", icon: <FaGitAlt />, color: "#F05032" },
     { name: "Redux", icon: <SiRedux />, color: "#764ABC" },
-    { name: "Vue.js", icon: <SiVuedotjs />, color: "#42B883" },
-    { name: "Nuxt.js", icon: <SiNuxtdotjs />, color: "#00C58E" },
+    { name: "Vue", icon: <SiVuedotjs />, color: "#42B883" },
+    { name: "Nuxt", icon: <SiNuxtdotjs />, color: "#00C58E" },
     { name: "GitHub", icon: <SiGithub />, color: "#111827" },
     { name: "Postman", icon: <SiPostman />, color: "#FF6C37" },
-  ],
-}) {
-  const cssMarqueeRef = useRef(null);
+  ];
 
   return (
-    <section className="w-full bg-black text-white py-10 px-4">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-semibold mb-6 text-center">{title}</h2>
+    <section className="relative w-full bg-black text-white py-16 overflow-hidden">
 
-        <div className="relative">
-          {/* Marquee for large screens */}
-          <div className="hidden sm:block">
-            <marquee
-              behavior="scroll"
-              direction="left"
-              scrollamount="6"
-              onMouseOver={(e) => e.target.stop()}
-              onMouseOut={(e) => e.target.start()}
-              className="w-full"
-            >
-              <div className="flex items-center gap-4 px-4">
-                {skills.map((s, i) => (
-                  <div
-                    key={s.name + i}
-                    className="inline-flex items-center gap-4 px-5 py-3 rounded-full shadow-sm bg-gray-900/40"
-                  >
-                    <span
-                      className="flex items-center justify-center rounded-full text-white shrink-0"
-                      style={{ backgroundColor: s.color, width: 40, height: 40 }}
-                    >
-                      {React.cloneElement(s.icon, { size: 20 })}
-                    </span>
-                    <span className="text-sm sm:text-base font-medium">{s.name}</span>
-                  </div>
-                ))}
-              </div>
-            </marquee>
-          </div>
+      {/* 🔥 THREE.JS BACKGROUND */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 5] }}>
+          <ambientLight />
+          <Particles />
+        </Canvas>
+      </div>
 
-          {/* Mobile CSS marquee */}
-          <div className="block sm:hidden">
-            <div className="overflow-hidden">
+      {/* 🔥 CONTENT */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4">
+
+        <h2 className="text-3xl font-bold mb-10 text-center">My Skills</h2>
+
+        {/* 🔥 WORKING MARQUEE (ALL SCREENS) */}
+        <div className="overflow-hidden">
+          <div className="flex gap-6 animate-marquee whitespace-nowrap">
+            {[...skills, ...skills].map((s, i) => (
               <div
-                ref={cssMarqueeRef}
-                className="inline-flex whitespace-nowrap py-3 animate-marquee"
-                onMouseEnter={() => {
-                  if (cssMarqueeRef.current)
-                    cssMarqueeRef.current.style.animationPlayState = "paused";
-                }}
-                onMouseLeave={() => {
-                  if (cssMarqueeRef.current)
-                    cssMarqueeRef.current.style.animationPlayState = "running";
-                }}
-              >
-                {skills.concat(skills).map((s, i) => (
-                  <div
-                    key={s.name + i}
-                    className="mx-4 inline-flex items-center gap-4 px-5 py-3 rounded-full shadow-sm bg-gray-900/40"
-                  >
-                    <span
-                      className="flex items-center justify-center rounded-full text-white shrink-0"
-                      style={{ backgroundColor: s.color, width: 40, height: 40 }}
-                    >
-                      {React.cloneElement(s.icon, { size: 20 })}
-                    </span>
-                    <span className="text-sm sm:text-base font-medium">{s.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Static grid */}
-          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4">
-            {skills.map((s) => (
-              <div
-                key={s.name}
-                className="flex items-center gap-4 px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg shadow-sm text-sm sm:text-base font-medium"
+                key={i}
+                className="flex items-center gap-3 px-5 py-3 rounded-full bg-gray-900/60 border border-gray-700"
               >
                 <span
-                  className="flex items-center justify-center rounded-full text-white shrink-0"
-                  style={{ backgroundColor: s.color, width: 44, height: 44 }}
+                  className="flex items-center justify-center rounded-full"
+                  style={{
+                    backgroundColor: s.color,
+                    width: 40,
+                    height: 40,
+                  }}
                 >
                   {React.cloneElement(s.icon, { size: 20 })}
                 </span>
@@ -120,8 +94,28 @@ export default function Skills({
             ))}
           </div>
         </div>
+
+        {/* 🔥 GRID */}
+        <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4">
+          {skills.map((s) => (
+            <div
+              key={s.name}
+              className="flex items-center gap-3 px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg"
+            >
+              <span
+                className="flex items-center justify-center rounded-full"
+                style={{ backgroundColor: s.color, width: 40, height: 40 }}
+              >
+                {React.cloneElement(s.icon, { size: 18 })}
+              </span>
+              <span>{s.name}</span>
+            </div>
+          ))}
+        </div>
+
       </div>
 
+      {/* 🔥 GLOBAL MARQUEE CSS */}
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0%); }
@@ -129,7 +123,6 @@ export default function Skills({
         }
 
         .animate-marquee {
-          display: inline-block;
           animation: marquee 20s linear infinite;
         }
       `}</style>

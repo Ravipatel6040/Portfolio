@@ -1,13 +1,46 @@
 import React from "react";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { Canvas } from "@react-three/fiber";
+import { Float, OrbitControls } from "@react-three/drei";
+
+// 3D Animated Spheres
+const FloatingShapes = () => {
+  return (
+    <>
+      {[...Array(15)].map((_, i) => (
+        <Float key={i} speed={2} rotationIntensity={1} floatIntensity={2}>
+          <mesh position={[
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 6,
+            (Math.random() - 0.5) * 5
+          ]}>
+            <sphereGeometry args={[0.2, 32, 32]} />
+            <meshStandardMaterial color="#3b82f6" />
+          </mesh>
+        </Float>
+      ))}
+    </>
+  );
+};
 
 const About = () => {
   return (
-    <section className="w-full bg-gray-900 text-white py-16 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <section className="relative w-full bg-gray-900 text-white py-20 px-6 overflow-hidden">
+      
+      {/* 3D Background */}
+      <div className="absolute inset-0 z-0">
+        <Canvas camera={{ position: [0, 0, 5] }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[5, 5, 5]} />
+          <FloatingShapes />
+          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={1} />
+        </Canvas>
+      </div>
 
-        {/* Right Content */}
-        <div className="w-full">
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 backdrop-blur-md bg-black/40 p-8 rounded-2xl">
+
+        <div className="w-full text-center md:text-left">
           <h2 className="text-4xl font-bold mb-4">About Me</h2>
 
           <p className="text-gray-300 leading-relaxed mb-4">
@@ -36,7 +69,7 @@ const About = () => {
             </div>
             <div>
               <p className="text-gray-400">Role:</p>
-              <p className="font-semibold">MERN Stack Developer</p>
+              <p className="font-semibold">Full Stack Developer</p>
             </div>
             <div>
               <p className="text-gray-400">Location:</p>
@@ -45,11 +78,12 @@ const About = () => {
           </div>
 
           {/* Social Icons */}
-          <div className="flex items-center gap-6 mb-6">
+          <div className="flex justify-center md:justify-start gap-6 mb-6">
             <a
               href="https://www.linkedin.com/in/ravi6040/"
               target="_blank"
-              className="text-blue-500 text-3xl hover:text-blue-600 transition"
+              rel="noreferrer"
+              className="text-blue-500 text-3xl hover:scale-125 transition"
             >
               <FaLinkedin />
             </a>
@@ -57,7 +91,8 @@ const About = () => {
             <a
               href="https://github.com/Ravipatel6040"
               target="_blank"
-              className="text-gray-300 text-3xl hover:text-white transition"
+              rel="noreferrer"
+              className="text-gray-300 text-3xl hover:scale-125 transition"
             >
               <FaGithub />
             </a>

@@ -6,13 +6,20 @@ import ExperienceSection from "./components/ExperienceSection";
 import EducationSection from "./components/EducationSection";
 import ProjectSection from "./components/ProjectSection";
 import ContactSection from "./components/ContactSection";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Cursor from "./components/Cursor/Cursor";
 
 export default function App() {
   return (
-   
+
+   <>
+   <Cursor/>
     <div className="min-h-screen bg-black text-white">
       {/* Home */}
+        <ToastContainer />
       <HeroSection />
+      
 
       {/* About */}
       <section id="about">
@@ -44,5 +51,6 @@ export default function App() {
     <ContactSection/>
       </section>
     </div>
+    </>
   );
 }
