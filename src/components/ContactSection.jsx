@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Float } from "@react-three/drei";
 import {
   FaPhone,
   FaEnvelope,
@@ -10,155 +8,334 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-// 🔥 Three.js particles
-const Particles = () => {
-  return (
-    <>
-      {[...Array(12)].map((_, i) => (
-        <Float key={i} speed={2} rotationIntensity={1} floatIntensity={2}>
-          <mesh
-            position={[
-              (Math.random() - 0.5) * 10,
-              (Math.random() - 0.5) * 6,
-              (Math.random() - 0.5) * 5,
-            ]}
-          >
-            <sphereGeometry args={[0.15, 32, 32]} />
-            <meshStandardMaterial color="#6366f1" />
-          </mesh>
-        </Float>
-      ))}
-    </>
-  );
-};
-
 export default function ContactSection() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
-    honey: "",
   });
+
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(null);
 
   function validate() {
     const e = {};
-    if (!form.name.trim()) e.name = "Name is required";
-    if (!form.email.trim()) e.email = "Email is required";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email))
-      e.email = "Enter a valid email";
-    if (!form.message.trim() || form.message.length < 10)
+
+    if (!form.name.trim()) {
+      e.name = "Name is required";
+    }
+
+    if (!form.email.trim()) {
+      e.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      e.email = "Enter valid email";
+    }
+
+    if (!form.message.trim() || form.message.length < 10) {
       e.message = "Message must be at least 10 characters";
+    }
+
     return e;
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    setStatus(null);
+
     const v = validate();
     setErrors(v);
-    if (Object.keys(v).length) return;
 
-    if (form.honey) {
-      setStatus("error");
-      return;
-    }
+    if (Object.keys(v).length) return;
 
     setStatus("sending");
 
-    try {
-      const mailto = `mailto:patelravi60404121@gmail.com?subject=${encodeURIComponent(
-        form.subject || "Portfolio Contact"
-      )}&body=${encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
-      )}`;
+    const mailto = `mailto:patelravi60404121@gmail.com?subject=${encodeURIComponent(
+      form.subject || "Portfolio Contact"
+    )}&body=${encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    )}`;
 
-      window.location.href = mailto;
-      setStatus("success");
-      setForm({ name: "", email: "", subject: "", message: "", honey: "" });
-    } catch {
-      setStatus("error");
-    }
+    window.location.href = mailto;
+
+    setStatus("success");
+
+    setForm({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
   }
 
+  const contactItems = [
+    {
+      icon: <FaEnvelope size={16} />,
+      label: "Email",
+      value: "patelravi60404121@gmail.com",
+    },
+    {
+      icon: <FaPhone size={16} />,
+      label: "Phone",
+      value: "+91 9754976040",
+    },
+    {
+      icon: <FaMapMarkerAlt size={16} />,
+      label: "Location",
+      value: "Indore, India",
+    },
+  ];
+
+  const socials = [
+    {
+      Icon: FaGithub,
+      href: "#",
+      label: "GitHub",
+    },
+    {
+      Icon: FaLinkedin,
+      href: "#",
+      label: "LinkedIn",
+    },
+    {
+      Icon: FaTwitter,
+      href: "#",
+      label: "Twitter",
+    },
+  ];
+
   return (
-    <section
-      id="contact"
-      className="relative w-full py-20 bg-black text-white overflow-hidden"
-    >
-      {/* 🔥 THREE.JS BACKGROUND */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 5] }} dpr={[1, 1.5]}>
-          <ambientLight intensity={0.6} />
-          <Particles />
-        </Canvas>
-      </div>
+    <section id="contact" style={s.section}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-      {/* 🔥 OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/80 to-black z-10" />
+        *{
+          box-sizing:border-box;
+        }
 
-      <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Heading */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
-            Get in Touch
+        .contact-section-bg {
+          background-image:
+            linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px);
+          background-size: 50px 50px;
+        }
+
+        .cf-card {
+          padding: 35px;
+          border-radius: 22px;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          backdrop-filter: blur(14px);
+          transition: 0.3s;
+        }
+
+        .cf-card:hover{
+          border-color: rgba(34,197,94,0.25);
+          box-shadow: 0 0 30px rgba(34,197,94,0.08);
+        }
+
+        .cf-input {
+          width: 100%;
+          padding: 14px 16px;
+          border-radius: 12px;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          outline: none;
+          color: white;
+          font-size: 14px;
+          transition: 0.3s;
+        }
+
+        .cf-input::placeholder{
+          color: rgba(255,255,255,0.35);
+        }
+
+        .cf-input:focus{
+          border-color: #22c55e;
+          box-shadow: 0 0 0 3px rgba(34,197,94,0.1);
+        }
+
+        .cf-input.error{
+          border-color:#f87171;
+        }
+
+        .info-item{
+          display:flex;
+          align-items:center;
+          gap:15px;
+          padding:14px;
+          border-radius:14px;
+          transition:0.3s;
+        }
+
+        .info-item:hover{
+          background:rgba(34,197,94,0.05);
+          transform:translateX(4px);
+        }
+
+        .social-btn{
+          width:42px;
+          height:42px;
+          border-radius:12px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          color:white;
+          background:rgba(255,255,255,0.05);
+          border:1px solid rgba(255,255,255,0.08);
+          transition:0.3s;
+          text-decoration:none;
+        }
+
+        .social-btn:hover{
+          background:#22c55e;
+          color:black;
+          transform:translateY(-3px);
+        }
+
+        .submit-btn{
+          width:100%;
+          padding:14px;
+          border:none;
+          border-radius:12px;
+          background:#22c55e;
+          color:black;
+          font-size:15px;
+          font-weight:700;
+          cursor:pointer;
+          transition:0.3s;
+        }
+
+        .submit-btn:hover{
+          background:#16a34a;
+          transform:translateY(-2px);
+        }
+
+        .contact-grid{
+          display:grid;
+          grid-template-columns:1fr 1.2fr;
+          gap:20px;
+        }
+
+        .contact-form-grid{
+          display:grid;
+          grid-template-columns:1fr 1fr;
+          gap:12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 992px){
+
+          .contact-grid{
+            grid-template-columns:1fr;
+          }
+
+        }
+
+        @media (max-width:768px){
+
+          .contact-section{
+            padding:70px 18px !important;
+          }
+
+          .cf-card{
+            padding:24px 18px;
+          }
+
+          .contact-form-grid{
+            grid-template-columns:1fr;
+          }
+
+          .footer-responsive{
+            flex-direction:column;
+            gap:6px;
+            text-align:center;
+          }
+
+          .title-responsive{
+            font-size:38px !important;
+          }
+
+        }
+
+        @media (max-width:480px){
+
+          .cf-card{
+            padding:20px 15px;
+          }
+
+          .cf-input{
+            font-size:13px;
+            padding:12px 14px;
+          }
+
+          .submit-btn{
+            font-size:13px;
+          }
+
+          .title-responsive{
+            font-size:32px !important;
+          }
+
+        }
+      `}</style>
+
+      <div className="contact-section-bg" style={s.gridBg}></div>
+
+      <div style={s.content}>
+        {/* HEADER */}
+
+        <div style={s.header}>
+          <div style={s.label}>
+            <span style={s.dot}></span>
+            Let's Connect
+          </div>
+
+          <h2 style={s.title} className="title-responsive">
+            Get In <span style={{ color: "#22c55e" }}>Touch</span>
           </h2>
-          <p className="mt-3 text-gray-300 max-w-xl mx-auto">
-            Have a project or opportunity? Let’s connect and build something amazing.
+
+          <p style={s.subtitle}>
+            Have a project or opportunity? Let's build something great together.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          
-          {/* LEFT CARD */}
-          <div className="p-6 sm:p-8 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 hover:shadow-[0_0_30px_rgba(99,102,241,0.3)] transition">
+        {/* GRID */}
 
-            <h3 className="text-xl font-semibold mb-4">Contact Info</h3>
+        <div className="contact-grid">
+          {/* LEFT */}
 
-            <div className="space-y-5">
-              {[
-                {
-                  icon: <FaEnvelope />,
-                  label: "Email",
-                  value: "patelravi60404121@gmail.com",
-                },
-                {
-                  icon: <FaPhone />,
-                  label: "Phone",
-                  value: "+91 9754976040",
-                },
-                {
-                  icon: <FaMapMarkerAlt />,
-                  label: "Location",
-                  value: "Indore, India",
-                },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 p-4 rounded-xl hover:bg-indigo-500/10 transition"
-                >
-                  <div className="p-2 bg-indigo-500/20 rounded-lg">
-                    {item.icon}
-                  </div>
+          <div className="cf-card">
+            <h3 style={s.cardTitle}>Contact Info</h3>
+
+            <p style={s.cardSub}>
+              Feel free to reach out through any channel.
+            </p>
+
+            <div style={{ marginTop: 30 }}>
+              {contactItems.map((item) => (
+                <div className="info-item" key={item.label}>
+                  <div style={s.iconBox}>{item.icon}</div>
+
                   <div>
-                    <p className="text-gray-400 text-sm">{item.label}</p>
-                    <p className="font-medium">{item.value}</p>
+                    <div style={s.infoLabel}>{item.label}</div>
+
+                    <div style={s.infoValue}>{item.value}</div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Social */}
-            <div className="mt-8 flex gap-4">
-              {[FaGithub, FaLinkedin, FaTwitter].map((Icon, i) => (
+            <div style={s.divider}></div>
+
+            <div style={{ display: "flex", gap: 12 }}>
+              {socials.map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="#"
-                  className="p-3 rounded-lg bg-white/10 hover:bg-indigo-500/30 transition"
+                  key={label}
+                  href={href}
+                  className="social-btn"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   <Icon />
                 </a>
@@ -166,68 +343,246 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* RIGHT FORM */}
-          <div className="p-6 sm:p-8 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              
-              <input type="text" className="hidden" />
+          {/* RIGHT */}
 
-              <div className="grid sm:grid-cols-2 gap-4">
+          <div className="cf-card">
+            <h3 style={s.cardTitle}>Send Message</h3>
+
+            <p style={s.cardSub}>
+              I'll get back to you within 24 hours.
+            </p>
+
+            <form onSubmit={handleSubmit} style={{ marginTop: 25 }}>
+              <div className="contact-form-grid">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className={`cf-input ${
+                      errors.name ? "error" : ""
+                    }`}
+                    value={form.name}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+
+                  {errors.name && (
+                    <p style={s.errText}>{errors.name}</p>
+                  )}
+                </div>
+
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    className={`cf-input ${
+                      errors.email ? "error" : ""
+                    }`}
+                    value={form.email}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        email: e.target.value,
+                      })
+                    }
+                  />
+
+                  {errors.email && (
+                    <p style={s.errText}>{errors.email}</p>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ marginTop: 12 }}>
                 <input
-                  placeholder="Name"
-                  className="p-3 rounded-lg bg-gray-900 border border-gray-700 focus:ring-2 focus:ring-indigo-500"
-                  value={form.name}
+                  type="text"
+                  placeholder="Subject"
+                  className="cf-input"
+                  value={form.subject}
                   onChange={(e) =>
-                    setForm({ ...form, name: e.target.value })
-                  }
-                />
-                <input
-                  placeholder="Email"
-                  className="p-3 rounded-lg bg-gray-900 border border-gray-700 focus:ring-2 focus:ring-indigo-500"
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
+                    setForm({
+                      ...form,
+                      subject: e.target.value,
+                    })
                   }
                 />
               </div>
 
-              <input
-                placeholder="Subject"
-                className="p-3 w-full rounded-lg bg-gray-900 border border-gray-700 focus:ring-2 focus:ring-indigo-500"
-                value={form.subject}
-                onChange={(e) =>
-                  setForm({ ...form, subject: e.target.value })
-                }
-              />
+              <div style={{ marginTop: 12 }}>
+                <textarea
+                  rows="5"
+                  placeholder="Your Message"
+                  className={`cf-input ${
+                    errors.message ? "error" : ""
+                  }`}
+                  value={form.message}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      message: e.target.value,
+                    })
+                  }
+                ></textarea>
 
-              <textarea
-                placeholder="Message"
-                className="p-3 w-full rounded-lg bg-gray-900 border border-gray-700 min-h-[120px] focus:ring-2 focus:ring-indigo-500"
-                value={form.message}
-                onChange={(e) =>
-                  setForm({ ...form, message: e.target.value })
-                }
-              />
+                {errors.message && (
+                  <p style={s.errText}>{errors.message}</p>
+                )}
+              </div>
 
-              <button
-                type="submit"
-                className="w-full py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition font-semibold"
-              >
-                {status === "sending" ? "Sending..." : "Send Message"}
-              </button>
+              <div style={{ marginTop: 16 }}>
+                <button className="submit-btn">
+                  {status === "sending"
+                    ? "Opening..."
+                    : "Send Message"}
+                </button>
+              </div>
 
               {status === "success" && (
-                <p className="text-green-400 text-sm">Email client opened ✅</p>
+                <div style={s.successMsg}>
+                  ✅ Email client opened successfully!
+                </div>
               )}
             </form>
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-10">
-          © {new Date().getFullYear()} Ravi Patel
-        </p>
+        {/* FOOTER */}
+
+        <div style={s.footer} className="footer-responsive">
+          <span>© 2026 Ravi Patel</span>
+          <span>Built with React ❤️</span>
+        </div>
       </div>
     </section>
   );
 }
+
+const s = {
+  section: {
+    position: "relative",
+    width: "100%",
+    minHeight: "100vh",
+    background: "#050a05",
+    overflow: "hidden",
+    padding: "90px 30px",
+    color: "white",
+  },
+
+  gridBg: {
+    position: "absolute",
+    inset: 0,
+  },
+
+  content: {
+    position: "relative",
+    zIndex: 2,
+    maxWidth: "1100px",
+    margin: "0 auto",
+  },
+
+  header: {
+    textAlign: "center",
+    marginBottom: "60px",
+  },
+
+  label: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "6px 14px",
+    borderRadius: "30px",
+    border: "1px solid rgba(34,197,94,0.3)",
+    color: "#22c55e",
+    fontSize: 12,
+    marginBottom: 18,
+  },
+
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: "50%",
+    background: "#22c55e",
+  },
+
+  title: {
+    fontSize: "55px",
+    fontWeight: 800,
+    marginBottom: 12,
+    lineHeight: 1.1,
+  },
+
+  subtitle: {
+    maxWidth: 550,
+    margin: "0 auto",
+    color: "rgba(255,255,255,0.6)",
+    lineHeight: 1.7,
+  },
+
+  cardTitle: {
+    fontSize: 22,
+    fontWeight: 700,
+    marginBottom: 6,
+  },
+
+  cardSub: {
+    color: "rgba(255,255,255,0.5)",
+    fontSize: 14,
+  },
+
+  iconBox: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    background: "rgba(34,197,94,0.1)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#22c55e",
+  },
+
+  infoLabel: {
+    fontSize: 12,
+    color: "rgba(255,255,255,0.5)",
+  },
+
+  infoValue: {
+    fontSize: 14,
+    marginTop: 4,
+  },
+
+  divider: {
+    height: 1,
+    background: "rgba(255,255,255,0.08)",
+    margin: "24px 0",
+  },
+
+  errText: {
+    fontSize: 12,
+    color: "#f87171",
+    marginTop: 4,
+  },
+
+  successMsg: {
+    marginTop: 14,
+    padding: "12px",
+    borderRadius: 12,
+    background: "rgba(34,197,94,0.08)",
+    border: "1px solid rgba(34,197,94,0.25)",
+    color: "#4ade80",
+    fontSize: 14,
+  },
+
+  footer: {
+    marginTop: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 12,
+    color: "rgba(255,255,255,0.5)",
+    fontSize: 14,
+  },
+};

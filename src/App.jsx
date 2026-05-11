@@ -8,49 +8,58 @@ import ProjectSection from "./components/ProjectSection";
 import ContactSection from "./components/ContactSection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cursor from "./components/Cursor/Cursor";
+// import Cursor from "./components/Cursor/Cursor";
 
 export default function App() {
   return (
 
-   <>
-   <Cursor/>
-    <div className="min-h-screen bg-black text-white">
-      {/* Home */}
+    <>
+      {/* <Cursor/> */}
+      <div className="min-h-screen bg-black text-white">
+        {/* Home */}
         <ToastContainer />
-      <HeroSection />
-      
+        <HeroSection />
 
-      {/* About */}
-      <section id="about">
-        <AboutSection />
-      </section>
 
-      {/* Skills */}
-      <section id="skills">
-        <Skill />
-      </section>
+        {/* About */}
+        <section id="about">
+          <AboutSection />
+        </section>
 
-      {/* Education */}
-      <section id="education">
-        <EducationSection />
-      </section>
 
-      {/* Experience */}
-      <section id="experience">
-        <ExperienceSection />
-      </section>
+        <section id="projects">
+          <ProjectSection />
+        </section>
 
-     
-      <section id="projects">
-      <ProjectSection/>
-      </section>
+        {/* Skills */}
+        <section id="skills">
+          <Skill />
+        </section>
 
-      {/* Contact – placeholder */}
-      <section id="contact">
-    <ContactSection/>
-      </section>
-    </div>
+
+                {/* Experience */}
+        <section id="experience">
+          <ExperienceSection />
+        </section>
+
+
+
+
+        {/* Education */}
+        <section id="education">
+          <EducationSection />
+        </section>
+
+
+
+
+
+
+        {/* Contact – placeholder */}
+        <section id="contact">
+          <ContactSection />
+        </section>
+      </div>
     </>
   );
 }
